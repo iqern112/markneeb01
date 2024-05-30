@@ -52,18 +52,23 @@ socket.on('join-room', () => {
 document.getElementById('send-button').addEventListener('click', () => {
     const message = document.getElementById('message-input').value;
     if (message.trim()) {
+        // Send message to server
         socket.emit('chat-message', roomId, userId, message);
+        
+        // Display user's message in chat display
+        const userMessageElement = document.createElement('div');
+        userMessageElement.textContent = `You: ${message}`;
+        document.getElementById('chat-display').appendChild(userMessageElement);
+
+        // Clear message input field
         document.getElementById('message-input').value = '';
     }
 });
 
-socket.on('chat-message', ({ userId: messageUserId, msg }) => {
+
+socket.on('chat-message', ({ userId, msg }) => {
     const messageElement = document.createElement('div');
-    if (messageUserId === userId) {
-        messageElement.textContent = `You: ${msg}`;
-    } else {
-        messageElement.textContent = `${messageUserId}: ${msg}`;
-    }
+    messageElement.textContent = `${userId}: ${msg}`;
     document.getElementById('chat-display').appendChild(messageElement);
 });
 
