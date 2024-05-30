@@ -59,14 +59,14 @@ document.getElementById('send-button').addEventListener('click', () => {
 
 socket.on('chat-message', ({ userId, msg }) => {
     const messageElement = document.createElement('div');
-    messageElement.textContent = `${userId}: ${msg}`;
+    if (userId === userId) {
+        messageElement.textContent = `You: ${msg}`;
+    } else {
+        messageElement.textContent = `${userId}: ${msg}`;
+    }
     document.getElementById('chat-display').appendChild(messageElement);
-
-    // ส่งข้อความที่รับไปยังผู้ส่งด้วย
-    const senderMessageElement = document.createElement('div');
-    senderMessageElement.textContent = `You: ${msg}`;
-    document.getElementById('chat-display').appendChild(senderMessageElement);
 });
+
 
 
 
