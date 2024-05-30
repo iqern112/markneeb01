@@ -57,15 +57,16 @@ document.getElementById('send-button').addEventListener('click', () => {
     }
 });
 
-socket.on('chat-message', ({ userId, msg }) => {
+socket.on('chat-message', ({ userId: messageUserId, msg }) => {
     const messageElement = document.createElement('div');
-    if (userId === userId) {
+    if (messageUserId === userId) {
         messageElement.textContent = `You: ${msg}`;
     } else {
-        messageElement.textContent = `${userId}: ${msg}`;
+        messageElement.textContent = `${messageUserId}: ${msg}`;
     }
     document.getElementById('chat-display').appendChild(messageElement);
 });
+
 
 
 
