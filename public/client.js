@@ -16,7 +16,8 @@ function createRoom() {
     if (roomName) {
         socket.emit('create-room', roomName);
     }
-    
+    document.getElementById('home-page').style.display = 'none';
+    joinRoom(roomName);
 }
 
 socket.on('room-created', ({ roomId, roomName }) => {
@@ -26,7 +27,7 @@ socket.on('room-created', ({ roomId, roomName }) => {
         joinRoom(roomId);
     });
     document.getElementById('existing-rooms').appendChild(roomButton);
-    joinRoom(roomId);
+    
 });
 
 document.getElementById('enter-room-button').addEventListener('click', () => {
@@ -58,12 +59,14 @@ document.getElementById('send-button').addEventListener('click', () => {
 
 socket.on('chat-message', ({ userId, msg }) => {
     const messageElement = document.createElement('div');
-
-    // สร้างข้อความที่แสดงข้อความทั้งฝั่งส่งและรับ
-    const displayMsg = userId === userId ? `You: ${msg}` : `${userId}: ${msg}`;
-
-    messageElement.textContent = displayMsg;
+    messageElement.textContent = `${userId}: ${msg}`;
     document.getElementById('chat-display').appendChild(messageElement);
+
+    // ส่งข้อความที่รับไปยังผู้ส่งด้วย
+    const senderMessageElement = document.createElement('div');
+    senderMessageElement.textContent = `You: ${msg}`;
+    document.getElementById('chat-display').appendChild(senderMessageElement);
 });
+
 
 
