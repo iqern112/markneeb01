@@ -45,6 +45,7 @@ function joinRoom(roomName) {
 }
 
 socket.on('join-room', () => {
+    document.getElementById('home-page').style.display = 'none';
     document.getElementById('room-selection-page').style.display = 'none';
     document.getElementById('chat-room-section').style.display = 'block';
 });
