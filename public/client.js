@@ -24,7 +24,7 @@ socket.on('room-created', ({ roomId, roomName }) => {
     const roomButton = document.createElement('button');
     roomButton.textContent = roomName;
     roomButton.addEventListener('click', () => {
-        joinRoom(roomId);
+        joinRoom(roomName);
     });
     document.getElementById('existing-rooms').appendChild(roomButton);
     
