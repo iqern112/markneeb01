@@ -11,9 +11,18 @@ const port = process.env.PORT || 3000;
 
 const rooms = new Map();
 
+const onlineUsers = new Set(); // เก็บรายชื่อผู้ใช้ที่ออนไลน์
+
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
+    const userId = socket.id; // สร้าง userId โดยใช้ id ของ socket
+
+    // เพิ่มผู้ใช้เข้ารายการของผู้ใช้ที่ออนไลน์
+    onlineUsers.add(userId);
+    // ส่งรายชื่อผู้ใช้ที่ออนไลน์ให้กับผู้ใช้ทั้งหมดที่เข้าเว็บไซต์
+    io.emit('update-online-users', Array.from(onlineUsers));
+
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
         if (!rooms.has(roomId)) {
@@ -35,6 +44,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+         // ลบผู้ใช้ออกจากรายการของผู้ใช้ที่ออนไลน์
+        onlineUsers.delete(userId);
+        // ส่งรายชื่อผู้ใช้ที่ออนไลน์ให้กับผู้ใช้ทั้งหมดที่เข้าเว็บไซต์
+        io.emit('update-online-users', Array.from(onlineUsers));
+        
         rooms.forEach((users, roomId) => {
             if (users.has(socket.userId)) {
                 users.delete(socket.userId);

@@ -48,6 +48,21 @@ socket.on('join-room', () => {
     document.getElementById('room-selection-page').style.display = 'none';
     document.getElementById('chat-room-section').style.display = 'block';
 });
+// รับข้อมูลผู้ใช้ที่อยู่ในเว็บไซต์
+socket.on('update-online-users', (users) => {
+    const onlineUsersContainer = document.getElementById('online-users');
+    onlineUsersContainer.innerHTML = ''; // ล้างข้อมูลเก่าทิ้ง
+    const usersList = document.createElement('ul');
+
+    users.forEach(user => {
+        const userItem = document.createElement('li');
+        userItem.textContent = user;
+        usersList.appendChild(userItem);
+    });
+
+    onlineUsersContainer.appendChild(usersList);
+});
+
 
 document.getElementById('send-button').addEventListener('click', () => {
     const message = document.getElementById('message-input').value;
