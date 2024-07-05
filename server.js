@@ -16,6 +16,7 @@ const onlineUsers = new Set(); // เก็บรายชื่อผู้ใ�
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
+    console.log("user login")
     const userId = socket.id; // สร้าง userId โดยใช้ id ของ socket
 
     // เพิ่มผู้ใช้เข้ารายการของผู้ใช้ที่ออนไลน์
@@ -48,6 +49,7 @@ io.on('connection', (socket) => {
         onlineUsers.delete(userId);
         // ส่งรายชื่อผู้ใช้ที่ออนไลน์ให้กับผู้ใช้ทั้งหมดที่เข้าเว็บไซต์
         io.emit('update-online-users', Array.from(onlineUsers));
+        console.log("user disconect")
         
         rooms.forEach((users, roomId) => {
             if (users.has(socket.userId)) {
